@@ -10,6 +10,20 @@ import os
 
 app = Flask(__name__) # initialize Flask app
 
+load_dotenv()
+
+PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
+
+embedding = create_embedding_model()
+index_name = "medical-chatbot"
+
+# load existing vector store
+docsearch = PineconeVectorStore.from_existing_index(
+    embedding=embedding,
+    index_name=index_name
+)
+
 # home route
 @app.route("/")
 def index():
