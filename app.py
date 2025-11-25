@@ -84,7 +84,7 @@ def chat():
 
     # handle empty input
     if not user_msg or not user_msg.strip():
-        return "Please enter a question."
+        return "Please enter a question so I can better assist you."
 
     print("User:", user_msg)
     answer = rag_answer(user_msg)
@@ -98,4 +98,4 @@ def index():
     return render_template("index.html")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=False)
