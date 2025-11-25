@@ -68,6 +68,27 @@ def build_llama_prompt(context: str, question: str) -> str:
         add_generation_prompt=True
     )
 
+def small_talk_reply(text: str) -> str | None:
+    t = text.lower().strip()
+
+    if not t:
+        return None
+
+    # greetings
+    if any(w in t for w in ["hi", "hello", "hey", "good morning", "good afternoon", "good evening"]):
+        return "Hi, I am your medical chatbot. How can I help you today?"
+
+    # thanks
+    if any(w in t for w in ["thank you", "thanks", "thx", "ty"]):
+        return "You are welcome. Let me know if you have any other medical questions."
+
+    # goodbye
+    if any(w in t for w in ["bye", "goodbye", "see you"]):
+        return "Goodbye. Take care, and feel free to come back with more questions."
+
+    return None
+
+
 # RAG answer function
 def rag_answer(question: str) -> str:
     docs = retriever.get_relevant_documents(question) # retrieve relevant documents
@@ -87,6 +108,13 @@ def chat():
         return "Please enter a question so I can better assist you."
 
     print("User:", user_msg)
+
+    small = small_talk_reply(user_msg)
+
+    if small is not None:
+        print("Answer (small talk):", small)
+        return small
+    
     answer = rag_answer(user_msg)
     print("Answer:", answer)
 
